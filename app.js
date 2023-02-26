@@ -39,7 +39,7 @@ app.post('/users',(req,res)=>{
 	const email = req.body.email;
 	const password = req.body.password;
 	//const date = req.body.date;
-	const date =new Date().toUTCString()
+	const date = req.headers['Request-Date']
 	//insert them into the sql
 	const insertSQL = `INSERT INTO user (name, email, password) VALUES (?, ?, ?)`;
 
