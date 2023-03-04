@@ -18,7 +18,7 @@ function App() {
     event.preventDefault();
 
 
-    let res = fetch('http://3.218.196.210:3000/users',{
+    let res = fetch('http://3.218.196.210:3001/users',{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
