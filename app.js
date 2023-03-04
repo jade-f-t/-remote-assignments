@@ -1,9 +1,11 @@
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app=express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
@@ -33,7 +35,7 @@ app.get('/healthcheck',(req,res) => {
 	res.render('healthcheck');
 });
 
-app.post('/users',(req,res)=>{
+app.post('/users',cors(),(req,res)=>{
 	//get the data that the user inputted
 	const name = req.body.name;
 	const email = req.body.email;
