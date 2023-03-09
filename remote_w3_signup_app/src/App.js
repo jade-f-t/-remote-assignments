@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 
 function App() {
-  const [Name,setName] = useState('');
+  const [name,setName] = useState('');
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
 
@@ -16,21 +16,23 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    let date = new Date();
+    //http://localhost:3001/users
 
     let res = fetch('http://3.218.196.210:3001/users',{
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Request-Date': date.toUTCString()
       },
       body: JSON.stringify({
-        "name": Name, 
+        "name": name, 
         "email": email, 
         "password": password
       })
     }).then(response => {
         const result = response.text();
-        //console.log(result);
+        console.log(result);
         result
           .then(body => { 
           //console.log("body",body)
@@ -57,8 +59,8 @@ function App() {
         <label>name:</label>
         <input 
           type = 'text' 
-          name = "Name"
-          value = {Name}
+          name = "name"
+          value = {name}
           onChange = {(event)=>setName(event.target.value)} 
           required/>
       </div>
