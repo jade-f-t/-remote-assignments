@@ -1,9 +1,11 @@
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app=express();
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 
@@ -29,11 +31,11 @@ connection.connect(function(error){
 // 	res.render('index');
 // });
 
-app.get('/healthcheck',(req,res) => { 
+app.get('/api/healthcheck',(req,res) => { 
 	res.render('healthcheck');
 });
 
-app.post('/users',(req,res)=>{
+app.post('/api/users',cors(),(req,res)=>{
 	//get the data that the user inputted
 	const name = req.body.name;
 	const email = req.body.email;
@@ -42,7 +44,7 @@ app.post('/users',(req,res)=>{
 	const date = req.headers['Request-Date']
 	//insert them into the sql
 	const insertSQL = `INSERT INTO user (name, email, password) VALUES (?, ?, ?)`;
-
+	
 	//check regex
 	const emailRegEx = new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-zA-Z0-9-.]+$')
 	const nameRegEx = new RegExp('[a-zA-Z0-9]+')
@@ -84,11 +86,11 @@ app.post('/users',(req,res)=>{
 });
 //curl -X POST -H "Content-Type: application/json" -d '{"name": "Test1", "email": "Test1@example.com", "password": "Test1"}' http://3.218.196.210:3000/users
 //use pm2 to run in background >>> pm2 start app.js
-app.get('/users',(req,res)=>{
+app.get('/api/users',(req,res)=>{
 	const id = req.query.id;
 
 	const selectSQL = ' SELECT * FROM user WHERE id = ?';
-
+	// console.log(req);
 	connection.query(selectSQL,[id],
 		(err,result)=>{
 			if (! result[0]){
@@ -108,16 +110,16 @@ app.get('/users',(req,res)=>{
 					'date':date
 				};
 				res.status(200).json({data});
+
 			}
 			
-	
 		
 	});
 	
 });
 
-app.listen(3000,()=>{
-	console.log('port=3000');
+app.listen(3001,()=>{
+	console.log('port=3001');
 });
 
 
